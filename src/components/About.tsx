@@ -1,11 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
-import { Download, Film, Sparkles, Sliders, Palette, GraduationCap, MapPin } from 'lucide-react';
+import { Download, Film, Sparkles, Sliders, Palette, GraduationCap, MapPin, Clock } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
+import { calculateReadingTime, ReadingTimeResult } from '../utils/readingTime';
 
 export const About: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [readingTime, setReadingTime] = useState<ReadingTimeResult>(() =>
+    calculateReadingTime(PERSONAL_INFO.aboutText + ' ' + PERSONAL_INFO.introduction)
+  );
+
+  useEffect(() => {
+    if (sectionRef.current) {
+      // Dynamically count words and calculate reading time from the rendered section DOM
+      const result = calculateReadingTime(sectionRef.current);
+      setReadingTime(result);
+    }
+  }, []);
+
   return (
-    <section id="about" className="py-24 relative border-t border-stone-200 dark:border-[#262A34] bg-[#FAF9F6] dark:bg-[#111318] transition-colors duration-300">
+    <section
+      id="about"
+      ref={sectionRef}
+      className="py-24 relative border-t border-stone-200 dark:border-[#262A34] bg-[#FAF9F6] dark:bg-[#111318] transition-colors duration-300"
+    >
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         {/* Section Header */}
         <motion.div
@@ -13,15 +31,30 @@ export const About: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.6 }}
-          className="mb-14"
+          className="mb-14 flex flex-col sm:flex-row sm:items-end justify-between gap-4"
         >
-          <div className="text-xs font-mono uppercase tracking-widest text-emerald-600 dark:text-[#C6F36B] mb-2 font-bold flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-[#C6F36B]" />
-            <span>02 / ABOUT ME</span>
+          <div>
+            <div className="text-xs font-mono uppercase tracking-widest text-emerald-600 dark:text-[#C6F36B] mb-2 font-bold flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-[#C6F36B]" />
+              <span>02 / ABOUT ME</span>
+            </div>
+            <h2 className="text-3xl md:text-5xl font-black tracking-tight text-stone-900 dark:text-[#F3F1EA] font-display">
+              Turning Ideas Into Visual Stories.
+            </h2>
           </div>
-          <h2 className="text-3xl md:text-5xl font-black tracking-tight text-stone-900 dark:text-[#F3F1EA] font-display">
-            Turning Ideas Into Visual Stories.
-          </h2>
+
+          {/* Reading Time Badge in Section Header */}
+          <div
+            title={`Estimated reading time based on ${readingTime.words} words in this section`}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 dark:bg-[#C6F36B]/10 border border-emerald-500/25 dark:border-[#C6F36B]/25 text-emerald-700 dark:text-[#C6F36B] font-mono text-xs font-semibold self-start sm:self-end shadow-sm backdrop-blur-sm transition-all"
+          >
+            <Clock className="w-3.5 h-3.5 text-emerald-600 dark:text-[#C6F36B] shrink-0" />
+            <span>{readingTime.text}</span>
+            <span className="text-stone-300 dark:text-[#9296A2]/40">·</span>
+            <span className="text-stone-600 dark:text-[#9296A2] font-normal text-[11px]">
+              {readingTime.words} words
+            </span>
+          </div>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">

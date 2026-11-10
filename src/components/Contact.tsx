@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'motion/react';
 import { Mail, Linkedin, Github, MapPin, Send, CheckCircle2, Copy, Check, Sparkles, ArrowUpRight, Download } from 'lucide-react';
 import { PERSONAL_INFO, SERVICES } from '../data/portfolioData';
 import { FAQAccordion } from './FAQAccordion';
@@ -40,14 +41,20 @@ export const Contact: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-24 relative border-t border-stone-200 dark:border-[#262A34] bg-[#FAF9F6] dark:bg-[#111318] transition-colors duration-300">
+    <section id="contact" className="py-24 relative bg-[#FAF9F6] dark:bg-[#111318] transition-colors duration-300">
       {/* Background ambient lighting */}
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-500/5 dark:bg-[#C6F36B]/5 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-10 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           {/* Left Column: Contact Narrative & Direct Links */}
-          <div className="lg:col-span-5 flex flex-col justify-between">
+          <motion.div
+            initial={{ opacity: 0, x: -24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.7 }}
+            className="lg:col-span-5 flex flex-col justify-between"
+          >
             <div>
               <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-emerald-600 dark:text-[#C6F36B] uppercase mb-3 font-bold">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-[#C6F36B]" />
@@ -173,10 +180,16 @@ export const Contact: React.FC = () => {
             <div className="mt-8 pt-6 border-t border-stone-200 dark:border-[#262A34] text-xs text-stone-500 dark:text-[#9296A2] font-mono">
               * Dedicated freelance response within 24 hours. Affordable, creator-friendly rates for brands, creators, and agencies.
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column: Working Contact Form */}
-          <div className="lg:col-span-7">
+          <motion.div
+            initial={{ opacity: 0, x: 24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="lg:col-span-7"
+          >
             <div className="p-8 md:p-10 rounded-2xl bg-white dark:bg-[#1B1E26] border border-stone-200 dark:border-[#262A34] shadow-xl relative">
               {isSubmitted ? (
                 <div className="py-12 text-center flex flex-col items-center">
@@ -344,7 +357,7 @@ export const Contact: React.FC = () => {
                 </form>
               )}
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Interactive Services & Workflow FAQ Accordion */}

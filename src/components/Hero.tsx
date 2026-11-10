@@ -62,6 +62,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenInquiry, onPlayShowreel }) => 
 
   return (
     <section
+      id="hero"
       ref={heroRef}
       className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-20 overflow-hidden bg-[#FAF9F6] dark:bg-[#111318] transition-colors duration-300"
     >
@@ -199,7 +200,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenInquiry, onPlayShowreel }) => 
               onClick={() => soundManager.playClick()}
               className="inline-flex items-center gap-2 px-7 py-3.5 text-xs sm:text-sm font-bold text-stone-950 dark:text-[#111318] bg-emerald-400 dark:bg-[#C6F36B] hover:bg-emerald-300 dark:hover:bg-[#d5faa0] rounded-xl transition-all shadow-lg active:scale-95 uppercase tracking-wider hover:shadow-[0_0_25px_rgba(198,243,107,0.4)]"
             >
-              <span>View My Work</span>
+              <span>Explore My Work</span>
               <ArrowDown className="w-4 h-4 text-stone-950 dark:text-[#111318]" />
             </motion.a>
 

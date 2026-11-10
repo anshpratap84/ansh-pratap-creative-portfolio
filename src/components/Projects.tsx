@@ -18,11 +18,14 @@ import {
   Instagram,
   TrendingUp,
   BarChart3,
+  Tag,
 } from 'lucide-react';
 import { PROJECTS } from '../data/portfolioData';
 import { VideoModal } from './VideoModal';
 import { ZindagiCaseStudyModal } from './ZindagiCaseStudyModal';
 import { KuchhBhiCaseStudyModal } from './KuchhBhiCaseStudyModal';
+import { ProjectDistributionChart } from './ProjectDistributionChart';
+import { ProjectHighlights } from './ProjectHighlights';
 import { soundManager } from '../utils/soundEffects';
 
 interface ProjectsProps {
@@ -102,7 +105,7 @@ export const Projects: React.FC<ProjectsProps> = ({ onOpenInquiry, onPlayVideo }
     ],
     image: '/assets/aistudio/Screenshot_2026-11-04_at_12.53.48_PM_b5a859a7.png',
     liveUrl: 'https://zindagi-ki-dhun.vercel.app',
-    githubUrl: 'https://github.com/AnshPratap2314',
+    githubUrl: 'https://github.com/anshpratap84',
     ctaText: 'Explore Zindagi Ki Dhun',
     isPrimary: true,
   };
@@ -125,7 +128,7 @@ export const Projects: React.FC<ProjectsProps> = ({ onOpenInquiry, onPlayVideo }
     ],
     image: '/assets/aistudio/Screenshot_2026-11-04_at_12.55.10_PM_6a98a29b.png',
     liveUrl: 'https://ansh-portfolio-rho-seven.vercel.app',
-    githubUrl: 'https://github.com/AnshPratap2314/Ansh-portfolio',
+    githubUrl: 'https://github.com/anshpratap84/Ansh-portfolio',
     ctaText: 'Visit Live Portfolio',
   };
   const createSphereProject = PROJECTS.find((p) => p.id === 'createsphere-ai')!;
@@ -184,7 +187,7 @@ export const Projects: React.FC<ProjectsProps> = ({ onOpenInquiry, onPlayVideo }
   const formattedScrubTime = `00:${currentScrubSeconds < 10 ? '0' : ''}${currentScrubSeconds}`;
 
   return (
-    <section id="projects" className="py-24 relative border-t border-stone-200 dark:border-[#262A34] bg-[#FAF9F6] dark:bg-[#111318] transition-colors duration-300">
+    <section id="projects" className="py-24 relative bg-[#FAF9F6] dark:bg-[#111318] transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         {/* Section Header */}
         <motion.div
@@ -239,6 +242,12 @@ export const Projects: React.FC<ProjectsProps> = ({ onOpenInquiry, onPlayVideo }
             );
           })}
         </div>
+
+        {/* Small Data Visualization Component (Recharts Category Distribution) */}
+        <ProjectDistributionChart className="mb-10" />
+
+        {/* Project Highlights: Key Metrics with Animated Counters */}
+        <ProjectHighlights className="mb-12" />
 
         <AnimatePresence mode="wait">
           <motion.div
@@ -297,7 +306,7 @@ export const Projects: React.FC<ProjectsProps> = ({ onOpenInquiry, onPlayVideo }
                       <img
                         src={zindagiProject.image}
                         alt="Zindagi Ki Dhun — Cinematic Indian Lifestyle Music Discovery Platform"
-                        className="w-full h-full object-cover object-center transition-transform duration-700 group-hover/zpreview:scale-105"
+                        className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110"
                         referrerPolicy="no-referrer"
                         loading="lazy"
                       />
@@ -337,15 +346,40 @@ export const Projects: React.FC<ProjectsProps> = ({ onOpenInquiry, onPlayVideo }
                         <span className="text-amber-200/90 font-semibold hidden sm:inline">11 WORLDS</span>
                       </div>
 
-                      {/* Bottom Visual Bar */}
-                      <div className="absolute bottom-3.5 left-4 right-4 flex items-center justify-between text-xs font-mono text-white/90 z-20 pointer-events-none">
+                      {/* Default Resting Visual Bar (Fades out when hovered) */}
+                      <div className="absolute bottom-3.5 left-4 right-4 flex items-center justify-between text-xs font-mono text-white/90 z-20 pointer-events-none transition-opacity duration-300 group-hover:opacity-0">
                         <span className="bg-stone-950/80 px-2.5 py-1 rounded-lg backdrop-blur-sm border border-white/10 flex items-center gap-1.5 text-amber-200">
                           <Music className="w-3.5 h-3.5 text-amber-400" />
                           <span>ज़िंदगी की धुन — Har Zindagi Ki Apni Dhun</span>
                         </span>
-                        <span className="bg-amber-500 text-stone-950 font-bold px-2.5 py-1 rounded-lg shadow uppercase text-[10px] tracking-wider hidden sm:block">
-                          Click to View Case Study
+                        <span className="bg-amber-500 text-stone-950 font-bold px-2.5 py-1 rounded-lg shadow uppercase text-[10px] tracking-wider hidden sm:flex items-center gap-1">
+                          <Tag className="w-3 h-3" />
+                          <span>Hover to Reveal Details</span>
                         </span>
+                      </div>
+
+                      {/* Reveal Details Hover Overlay with Technical Tags */}
+                      <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5 pt-8 bg-gradient-to-t from-stone-950 via-stone-950/90 to-transparent backdrop-blur-md opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out z-20 pointer-events-none">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-[10px] font-mono uppercase tracking-widest text-amber-300 font-bold flex items-center gap-1.5">
+                            <Tag className="w-3 h-3 text-amber-400" />
+                            <span>Reveal Details · Technical Tags</span>
+                          </span>
+                          <span className="text-[10px] font-mono text-amber-200/70">
+                            {zindagiProject.tags.length} Technologies
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {zindagiProject.tags.map((tag, idx) => (
+                            <span
+                              key={idx}
+                              style={{ transitionDelay: `${idx * 35}ms` }}
+                              className="text-[10px] font-mono px-2.5 py-1 rounded-lg bg-stone-900/90 text-amber-200 border border-amber-500/40 shadow-sm transition-all duration-300 transform group-hover:translate-y-0 translate-y-1"
+                            >
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -478,8 +512,14 @@ export const Projects: React.FC<ProjectsProps> = ({ onOpenInquiry, onPlayVideo }
                       }}
                       className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-stone-950 border border-pink-500/30 dark:border-pink-500/40 shadow-2xl cursor-pointer group/kpreview focus:outline-none focus:ring-2 focus:ring-pink-500 p-5 flex flex-col justify-between"
                     >
-                      {/* Ambient background glow */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-purple-950/40 via-stone-950 to-pink-950/40 pointer-events-none" />
+                      {/* Ambient background glow and smoothly scaling project image */}
+                      <img
+                        src={kuchhBhiProject.image}
+                        alt="Kuchh Bhi Post Kardo Instagram & Short-Form Creative Preview"
+                        className="absolute inset-0 w-full h-full object-cover object-center opacity-20 group-hover:opacity-35 transition-all duration-700 ease-out group-hover:scale-110 pointer-events-none"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-br from-purple-950/60 via-stone-950/90 to-pink-950/60 pointer-events-none" />
                       <div className="absolute -top-12 -right-12 w-48 h-48 bg-pink-500/20 rounded-full blur-3xl pointer-events-none" />
 
                       {/* Header bar of Instagram Card */}
@@ -511,37 +551,62 @@ export const Projects: React.FC<ProjectsProps> = ({ onOpenInquiry, onPlayVideo }
 
                       {/* Center Stats & Highlights Showcase */}
                       <div className="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-2 my-auto">
-                        <div className="p-3 rounded-xl bg-black/50 border border-white/10 backdrop-blur-md">
+                        <div className="p-3 rounded-xl bg-black/60 border border-white/10 backdrop-blur-md">
                           <div className="text-xl sm:text-2xl font-black text-orange-400 font-display">143K</div>
                           <div className="text-[10px] text-stone-300 font-semibold uppercase">Top Reel</div>
                           <div className="text-[9px] text-stone-500">Breakout reach</div>
                         </div>
-                        <div className="p-3 rounded-xl bg-black/50 border border-white/10 backdrop-blur-md">
+                        <div className="p-3 rounded-xl bg-black/60 border border-white/10 backdrop-blur-md">
                           <div className="text-xl sm:text-2xl font-black text-pink-400 font-display">128K</div>
                           <div className="text-[10px] text-stone-300 font-semibold uppercase">Peak Reel</div>
                           <div className="text-[9px] text-stone-500">Viral engagement</div>
                         </div>
-                        <div className="p-3 rounded-xl bg-black/50 border border-white/10 backdrop-blur-md">
+                        <div className="p-3 rounded-xl bg-black/60 border border-white/10 backdrop-blur-md">
                           <div className="text-xl sm:text-2xl font-black text-emerald-400 font-display">448K+</div>
                           <div className="text-[10px] text-stone-300 font-semibold uppercase">30-Day Reach</div>
                           <div className="text-[9px] text-stone-500">Dashboard views</div>
                         </div>
-                        <div className="p-3 rounded-xl bg-black/50 border border-white/10 backdrop-blur-md">
+                        <div className="p-3 rounded-xl bg-black/60 border border-white/10 backdrop-blur-md">
                           <div className="text-xl sm:text-2xl font-black text-purple-400 font-display">70+</div>
                           <div className="text-[10px] text-stone-300 font-semibold uppercase">Posts</div>
                           <div className="text-[9px] text-stone-500">Curated archive</div>
                         </div>
                       </div>
 
-                      {/* Bottom action trigger bar */}
-                      <div className="relative z-10 flex items-center justify-between text-xs text-stone-300 pt-2 border-t border-white/10">
+                      {/* Bottom action trigger bar (Fades out when hovered) */}
+                      <div className="relative z-10 flex items-center justify-between text-xs text-stone-300 pt-2 border-t border-white/10 transition-opacity duration-300 group-hover:opacity-0">
                         <div className="flex items-center gap-2 font-mono text-[11px] text-pink-300">
                           <Film className="w-3.5 h-3.5 text-pink-400" />
                           <span>Short-Form Video Storytelling &amp; Memes</span>
                         </div>
                         <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-pink-500/20 text-pink-300 border border-pink-500/30 font-mono text-[10px] font-bold uppercase">
-                          Inspect Case Study ↗
+                          <Tag className="w-3 h-3" />
+                          <span>Hover to Reveal Details</span>
                         </span>
+                      </div>
+
+                      {/* Reveal Details Hover Overlay with Technical Tags */}
+                      <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5 pt-8 bg-gradient-to-t from-stone-950 via-stone-950/95 to-transparent backdrop-blur-md opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out z-20 pointer-events-none">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-[10px] font-mono uppercase tracking-widest text-pink-300 font-bold flex items-center gap-1.5">
+                            <Tag className="w-3 h-3 text-pink-400" />
+                            <span>Reveal Details · Technical Tags</span>
+                          </span>
+                          <span className="text-[10px] font-mono text-pink-200/70">
+                            {kuchhBhiProject.tags.length} Tools &amp; Methods
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {kuchhBhiProject.tags.map((tag, idx) => (
+                            <span
+                              key={idx}
+                              style={{ transitionDelay: `${idx * 35}ms` }}
+                              className="text-[10px] font-mono px-2.5 py-1 rounded-lg bg-stone-900/90 text-pink-200 border border-pink-500/40 shadow-sm transition-all duration-300 transform group-hover:translate-y-0 translate-y-1"
+                            >
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -669,7 +734,7 @@ export const Projects: React.FC<ProjectsProps> = ({ onOpenInquiry, onPlayVideo }
                       <img
                         src={cyberbullyingProject.image}
                         alt="Stop Cyberbullying Video Storytelling Project Preview"
-                        className="w-full h-full object-cover object-center transition-transform duration-700 group-hover/video:scale-105"
+                        className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110"
                         referrerPolicy="no-referrer"
                         loading="lazy"
                       />
@@ -707,14 +772,39 @@ export const Projects: React.FC<ProjectsProps> = ({ onOpenInquiry, onPlayVideo }
                         <span className="absolute inset-0 rounded-full bg-emerald-400/40 dark:bg-[#C6F36B]/40 animate-ping -z-10" />
                       </div>
 
-                      {/* Bottom Media Bar Overlay */}
-                      <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-[11px] font-mono text-white/90 z-20 pointer-events-none">
+                      {/* Bottom Media Bar Overlay (Fades out when hovered) */}
+                      <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-[11px] font-mono text-white/90 z-20 pointer-events-none transition-opacity duration-300 group-hover:opacity-0">
                         <span className="bg-black/60 px-2 py-0.5 rounded backdrop-blur-sm">
                           {isScrubbing ? formattedScrubTime : '00:57 FULL SHOWREEL'}
                         </span>
-                        <span className="bg-emerald-500/80 text-black px-2 py-0.5 rounded font-bold">
-                          HOVER TO SCRUB
+                        <span className="bg-emerald-500/80 text-black px-2 py-0.5 rounded font-bold flex items-center gap-1">
+                          <Tag className="w-3 h-3" />
+                          <span>Hover to Reveal Details</span>
                         </span>
+                      </div>
+
+                      {/* Reveal Details Hover Overlay with Technical Tags */}
+                      <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5 pt-8 bg-gradient-to-t from-stone-950 via-stone-950/95 to-transparent backdrop-blur-md opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out z-20 pointer-events-none">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-300 dark:text-[#C6F36B] font-bold flex items-center gap-1.5">
+                            <Tag className="w-3 h-3 text-emerald-400 dark:text-[#C6F36B]" />
+                            <span>Reveal Details · Technical Tags</span>
+                          </span>
+                          <span className="text-[10px] font-mono text-emerald-200/70 dark:text-[#C6F36B]/70">
+                            {cyberbullyingProject.tags.length} Tools &amp; Methods
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {cyberbullyingProject.tags.map((tag, idx) => (
+                            <span
+                              key={idx}
+                              style={{ transitionDelay: `${idx * 35}ms` }}
+                              className="text-[10px] font-mono px-2.5 py-1 rounded-lg bg-stone-900/90 text-emerald-300 dark:text-[#C6F36B] border border-emerald-500/40 shadow-sm transition-all duration-300 transform group-hover:translate-y-0 translate-y-1"
+                            >
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -736,12 +826,24 @@ export const Projects: React.FC<ProjectsProps> = ({ onOpenInquiry, onPlayVideo }
                     </p>
 
                     {/* Verified Points */}
-                    <div className="space-y-2.5 mb-8 text-xs text-stone-600 dark:text-[#9296A2]">
+                    <div className="space-y-2.5 mb-6 text-xs text-stone-600 dark:text-[#9296A2]">
                       {cyberbullyingProject.verifiedDetails.map((detail, idx) => (
                         <div key={idx} className="flex items-start gap-2.5">
                           <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-[#C6F36B] shrink-0 mt-0.5" />
                           <span>{detail}</span>
                         </div>
+                      ))}
+                    </div>
+
+                    {/* Technical Tags */}
+                    <div className="flex flex-wrap gap-1.5 mb-7">
+                      {cyberbullyingProject.tags.map((tag, idx) => (
+                        <span
+                          key={idx}
+                          className="text-[10px] font-mono px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-[#C6F36B] border border-emerald-500/20 group-hover:border-emerald-500/40 transition-colors"
+                        >
+                          {tag}
+                        </span>
                       ))}
                     </div>
 
@@ -769,200 +871,335 @@ export const Projects: React.FC<ProjectsProps> = ({ onOpenInquiry, onPlayVideo }
               </div>
             )}
 
-            {/* ==================== 2. PERSONAL PORTFOLIO & AI ART GRID ==================== */}
-            {(activeFilter === 'all' || activeFilter === 'portfolio' || activeFilter === 'ai') && (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* PERSONAL PORTFOLIO SHOWCASE (Replaced in place of previous photography card) */}
-                {(activeFilter === 'all' || activeFilter === 'portfolio') && (
+            {/* ==================== 3. PERSONAL PORTFOLIO SHOWCASE (FULL-WIDTH FEATURED CARD) ==================== */}
+            {(activeFilter === 'all' || activeFilter === 'portfolio') && (
+              <div
+                onMouseMove={(e) => handleCardMouseMove('portfolio', e)}
+                onMouseEnter={() => setHoveredCardId('portfolio')}
+                onMouseLeave={() => handleCardMouseLeave('portfolio')}
+                style={{
+                  transform:
+                    hoveredCardId === 'portfolio'
+                      ? `perspective(1000px) rotateX(${tiltStyle.portfolio?.rx || 0}deg) rotateY(${tiltStyle.portfolio?.ry || 0}deg)`
+                      : 'perspective(1000px) rotateX(0deg) rotateY(0deg)',
+                  transition: hoveredCardId === 'portfolio' ? 'none' : 'transform 0.5s ease-out',
+                }}
+                className="relative rounded-3xl border border-cyan-500/30 dark:border-cyan-500/35 bg-gradient-to-br from-white via-cyan-50/20 to-stone-50 dark:from-[#11161B] dark:via-[#0F1418] dark:to-[#0A0D10] overflow-hidden shadow-2xl hover:border-cyan-500/70 dark:hover:border-cyan-500/70 transition-all duration-300 group will-change-transform"
+              >
+                {/* Specular Cyan System Glow */}
+                {hoveredCardId === 'portfolio' && (
                   <div
-                    onMouseMove={(e) => handleCardMouseMove('portfolio', e)}
-                    onMouseEnter={() => setHoveredCardId('portfolio')}
-                    onMouseLeave={() => handleCardMouseLeave('portfolio')}
+                    className="absolute inset-0 pointer-events-none z-30 transition-opacity duration-300"
                     style={{
-                      transform:
-                        hoveredCardId === 'portfolio'
-                          ? `perspective(1000px) rotateX(${tiltStyle.portfolio?.rx || 0}deg) rotateY(${tiltStyle.portfolio?.ry || 0}deg)`
-                          : 'perspective(1000px) rotateX(0deg) rotateY(0deg)',
-                      transition: hoveredCardId === 'portfolio' ? 'none' : 'transform 0.5s ease-out',
+                      background: `radial-gradient(circle 500px at ${tiltStyle.portfolio?.gx || 50}% ${tiltStyle.portfolio?.gy || 50}%, rgba(6,182,212,0.12), transparent 75%)`,
                     }}
-                    className="relative rounded-2xl border border-stone-200 dark:border-[#262A34] bg-white dark:bg-[#1B1E26] p-6 sm:p-8 flex flex-col justify-between hover:border-emerald-500/50 dark:hover:border-[#C6F36B]/50 transition-all duration-300 group shadow-md will-change-transform overflow-hidden"
-                  >
-                    {hoveredCardId === 'portfolio' && (
-                      <div
-                        className="absolute inset-0 pointer-events-none z-30"
-                        style={{
-                          background: `radial-gradient(circle 350px at ${tiltStyle.portfolio?.gx || 50}% ${tiltStyle.portfolio?.gy || 50}%, rgba(198,243,107,0.06), transparent 80%)`,
-                        }}
+                  />
+                )}
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center p-6 sm:p-8 md:p-10 relative z-10">
+                  {/* Left Column: Large Visual Showcase */}
+                  <div className="lg:col-span-7 relative">
+                    <a
+                      href={portfolioProject.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      data-cursor="view"
+                      aria-label="View Ansh Pratap interactive portfolio"
+                      className="block relative aspect-[16/10] rounded-2xl overflow-hidden bg-black border border-cyan-500/30 dark:border-cyan-500/40 shadow-2xl cursor-pointer group/portfoliopreview focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    >
+                      <img
+                        src={portfolioProject.image}
+                        alt="Ansh Pratap — AI/ML & Interactive Web Portfolio Live Preview"
+                        className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-110"
+                        referrerPolicy="no-referrer"
+                        loading="lazy"
                       />
-                    )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-stone-950/85 via-stone-950/25 to-transparent pointer-events-none" />
 
-                    <div className="relative z-10">
-                      {/* Actual Live Portfolio Screenshot with System HUD Badge */}
-                      <div
-                        data-cursor="view"
-                        className="relative aspect-video rounded-xl overflow-hidden bg-black mb-6 border border-stone-200 dark:border-[#262A34] shadow-inner"
-                      >
-                        <img
-                          src={portfolioProject.image}
-                          alt="Ansh Pratap — AI/ML & Interactive Web Portfolio Live Preview"
-                          className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                          referrerPolicy="no-referrer"
-                          loading="lazy"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 dark:from-[#111318] via-transparent to-transparent opacity-60" />
+                      {/* Top Live Status Indicator with System Bus HUD */}
+                      <div className="absolute top-3.5 left-3.5 flex items-center gap-2 bg-stone-950/90 text-cyan-300 font-mono text-[10px] font-bold px-3 py-1.5 rounded-xl border border-cyan-500/40 backdrop-blur-md shadow-lg z-20">
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500" />
+                        </span>
+                        <span className="tracking-wider text-cyan-400">SYSTEM BUS: ACTIVE</span>
+                        <span className="text-cyan-500/50">·</span>
+                        <span className="text-stone-300 hidden sm:inline">VERCEL PRODUCTION</span>
+                        <span className="text-cyan-500/50 hidden sm:inline">·</span>
+                        <span className="text-cyan-300 font-semibold hidden md:inline">238 TESTS PASSING</span>
+                      </div>
 
-                        {/* Top HUD Badge */}
-                        <div className="absolute top-3 left-3 bg-stone-900/90 text-stone-100 font-mono text-[10px] font-bold px-2.5 py-1 rounded-lg border border-cyan-500/40 backdrop-blur-md flex items-center gap-1.5 shadow-md">
-                          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                          <span className="text-cyan-400">SYSTEM BUS: ACTIVE</span>
-                          <span className="text-stone-400">·</span>
-                          <span>VERCEL PRODUCTION</span>
+                      {/* Default Resting Visual Bar (Fades out when hovered) */}
+                      <div className="absolute bottom-3.5 left-4 right-4 flex items-center justify-between text-xs font-mono text-white/90 z-20 pointer-events-none transition-opacity duration-300 group-hover:opacity-0">
+                        <span className="bg-stone-950/80 px-2.5 py-1 rounded-lg backdrop-blur-sm border border-white/10 flex items-center gap-1.5 text-cyan-200">
+                          <Globe className="w-3.5 h-3.5 text-cyan-400" />
+                          <span>ansh-portfolio-rho-seven.vercel.app</span>
+                        </span>
+                        <span className="bg-cyan-500 text-stone-950 font-bold px-2.5 py-1 rounded-lg shadow uppercase text-[10px] tracking-wider hidden sm:flex items-center gap-1">
+                          <Tag className="w-3 h-3" />
+                          <span>Hover to Reveal Details</span>
+                        </span>
+                      </div>
+
+                      {/* Reveal Details Hover Overlay with Technical Tags */}
+                      <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5 pt-8 bg-gradient-to-t from-stone-950 via-stone-950/95 to-transparent backdrop-blur-md opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out z-20 pointer-events-none">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-[10px] font-mono uppercase tracking-widest text-cyan-300 font-bold flex items-center gap-1.5">
+                            <Tag className="w-3 h-3 text-cyan-400" />
+                            <span>Reveal Details · Technical Tags</span>
+                          </span>
+                          <span className="text-[10px] font-mono text-cyan-200/70">
+                            {portfolioProject.tags.length} Technologies
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {portfolioProject.tags.map((tag, idx) => (
+                            <span
+                              key={idx}
+                              style={{ transitionDelay: `${idx * 35}ms` }}
+                              className="text-[10px] font-mono px-2.5 py-1 rounded-lg bg-stone-900/90 text-cyan-200 border border-cyan-500/40 shadow-sm transition-all duration-300 transform group-hover:translate-y-0 translate-y-1"
+                            >
+                              #{tag}
+                            </span>
+                          ))}
                         </div>
                       </div>
+                    </a>
+                  </div>
 
-                      <div className="text-xs font-mono uppercase tracking-widest text-emerald-600 dark:text-[#C6F36B] mb-2 font-bold flex items-center gap-1.5">
-                        <Globe className="w-3.5 h-3.5" />
-                        <span>CATEGORY: PORTFOLIO & WEB · {portfolioProject.category}</span>
-                      </div>
-                      <h3 className="text-2xl font-bold text-stone-950 dark:text-[#FFFFFF] font-display mb-2">
-                        {portfolioProject.title}
-                      </h3>
-                      <div className="text-xs font-mono text-cyan-600 dark:text-cyan-400 mb-4">
-                        {portfolioProject.subtitle}
-                      </div>
-                      <p className="text-sm text-stone-600 dark:text-[#F3F1EA]/80 leading-relaxed mb-6 font-normal">
-                        {portfolioProject.description}
-                      </p>
+                  {/* Right Column: Editorial Details */}
+                  <div className="lg:col-span-5 flex flex-col justify-center">
+                    <div className="text-xs font-mono uppercase tracking-widest text-cyan-600 dark:text-cyan-400 mb-1 font-bold flex items-center gap-1.5">
+                      <Globe className="w-3.5 h-3.5" />
+                      <span>CATEGORY: PORTFOLIO &amp; WEB · INTERACTIVE WEB &amp; PORTFOLIO</span>
+                    </div>
 
-                      {/* Verified Details */}
-                      <div className="space-y-2 mb-8 text-xs text-stone-600 dark:text-[#9296A2]">
-                        {portfolioProject.verifiedDetails.map((detail, idx) => (
-                          <div key={idx} className="flex items-start gap-2">
-                            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-[#C6F36B] shrink-0 mt-0.5" />
-                            <span>{detail}</span>
-                          </div>
-                        ))}
-                      </div>
+                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-stone-950 dark:text-[#FFFFFF] font-display tracking-tight leading-tight mb-2">
+                      {portfolioProject.title}
+                    </h3>
+
+                    <div className="text-xs font-mono text-cyan-600 dark:text-cyan-400 mb-4 font-semibold">
+                      {portfolioProject.subtitle}
+                    </div>
+
+                    <p className="text-sm text-stone-600 dark:text-[#F3F1EA]/85 leading-relaxed mb-5 font-normal">
+                      {portfolioProject.description}
+                    </p>
+
+                    {/* Verified Details */}
+                    <div className="space-y-2 mb-6 text-xs text-stone-600 dark:text-[#9296A2]">
+                      {portfolioProject.verifiedDetails.map((detail, idx) => (
+                        <div key={idx} className="flex items-start gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-cyan-600 dark:text-cyan-400 shrink-0 mt-0.5" />
+                          <span>{detail}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Technical Tags */}
+                    <div className="flex flex-wrap gap-1.5 mb-7">
+                      {portfolioProject.tags.map((tag, idx) => (
+                        <span
+                          key={idx}
+                          className="text-[10px] font-mono px-2.5 py-1 rounded-md bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 border border-cyan-500/20 group-hover:border-cyan-500/40 transition-colors"
+                        >
+                          {tag}
+                        </span>
+                      ))}
                     </div>
 
                     {/* Action CTAs */}
-                    <div className="flex flex-wrap items-center gap-3 pt-6 border-t border-stone-200 dark:border-[#262A34] relative z-10">
+                    <div className="flex flex-wrap items-center gap-3">
                       <motion.a
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         href={portfolioProject.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold text-stone-950 dark:text-[#111318] bg-emerald-400 dark:bg-[#C6F36B] hover:bg-emerald-300 dark:hover:bg-[#d5faa0] rounded-xl transition-all shadow-md active:scale-95 uppercase tracking-wider"
+                        className="inline-flex items-center gap-2 px-6 py-3.5 text-xs font-bold text-stone-950 bg-cyan-400 hover:bg-cyan-300 dark:bg-cyan-400 dark:hover:bg-cyan-300 rounded-xl transition-all shadow-md active:scale-95 uppercase tracking-wider"
                       >
                         <span>Visit Live Portfolio</span>
-                        <ExternalLink className="w-3.5 h-3.5 text-stone-950 dark:text-[#111318]" />
+                        <ExternalLink className="w-3.5 h-3.5 text-stone-950" />
                       </motion.a>
 
-                      <a
-                        href={portfolioProject.githubUrl || 'https://github.com/AnshPratap2314/Ansh-portfolio'}
+                      <motion.a
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        href={portfolioProject.githubUrl || 'https://github.com/anshpratap84/Ansh-portfolio'}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-5 py-3 text-xs font-semibold text-stone-800 dark:text-[#FFFFFF] hover:text-emerald-700 dark:hover:text-[#C6F36B] bg-stone-100 dark:bg-[#111318] hover:bg-stone-200 dark:hover:bg-[#262A34] border border-stone-300 dark:border-[#262A34] rounded-xl transition-all"
+                        className="inline-flex items-center gap-2 px-5 py-3.5 text-xs font-semibold text-stone-800 dark:text-[#FFFFFF] hover:text-cyan-600 dark:hover:text-cyan-400 bg-stone-100 dark:bg-[#1A1815] hover:bg-stone-200 dark:hover:bg-[#262420] border border-stone-300 dark:border-cyan-500/30 rounded-xl transition-all"
                       >
                         <Github className="w-3.5 h-3.5" />
                         <span>GitHub Repo</span>
-                      </a>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </motion.a>
                     </div>
                   </div>
+                </div>
+              </div>
+            )}
+
+            {/* ==================== 4. CREATESPHERE AI SHOWCASE (FULL-WIDTH FEATURED CARD) ==================== */}
+            {(activeFilter === 'all' || activeFilter === 'ai') && (
+              <div
+                onMouseMove={(e) => handleCardMouseMove('createsphere', e)}
+                onMouseEnter={() => setHoveredCardId('createsphere')}
+                onMouseLeave={() => handleCardMouseLeave('createsphere')}
+                style={{
+                  transform:
+                    hoveredCardId === 'createsphere'
+                      ? `perspective(1000px) rotateX(${tiltStyle.createsphere?.rx || 0}deg) rotateY(${tiltStyle.createsphere?.ry || 0}deg)`
+                      : 'perspective(1000px) rotateX(0deg) rotateY(0deg)',
+                  transition: hoveredCardId === 'createsphere' ? 'none' : 'transform 0.5s ease-out',
+                }}
+                className="relative rounded-3xl border border-emerald-500/30 dark:border-[#C6F36B]/35 bg-gradient-to-br from-white via-emerald-50/20 to-stone-50 dark:from-[#131713] dark:via-[#101410] dark:to-[#0B0E0B] overflow-hidden shadow-2xl hover:border-emerald-500/70 dark:hover:border-[#C6F36B]/70 transition-all duration-300 group will-change-transform"
+              >
+                {/* Specular Emerald / Neon Lime Glow */}
+                {hoveredCardId === 'createsphere' && (
+                  <div
+                    className="absolute inset-0 pointer-events-none z-30 transition-opacity duration-300"
+                    style={{
+                      background: `radial-gradient(circle 500px at ${tiltStyle.createsphere?.gx || 50}% ${tiltStyle.createsphere?.gy || 50}%, rgba(198,243,107,0.12), transparent 75%)`,
+                    }}
+                  />
                 )}
 
-                {/* AI ART PROJECT SHOWCASE */}
-                {(activeFilter === 'all' || activeFilter === 'ai') && (
-                  <div
-                    onMouseMove={(e) => handleCardMouseMove('createsphere', e)}
-                    onMouseEnter={() => setHoveredCardId('createsphere')}
-                    onMouseLeave={() => handleCardMouseLeave('createsphere')}
-                    style={{
-                      transform:
-                        hoveredCardId === 'createsphere'
-                          ? `perspective(1000px) rotateX(${tiltStyle.createsphere?.rx || 0}deg) rotateY(${tiltStyle.createsphere?.ry || 0}deg)`
-                          : 'perspective(1000px) rotateX(0deg) rotateY(0deg)',
-                      transition: hoveredCardId === 'createsphere' ? 'none' : 'transform 0.5s ease-out',
-                    }}
-                    className="relative rounded-2xl border border-stone-200 dark:border-[#262A34] bg-white dark:bg-[#1B1E26] p-6 sm:p-8 flex flex-col justify-between hover:border-emerald-500/50 dark:hover:border-[#C6F36B]/50 transition-all duration-300 group shadow-md will-change-transform overflow-hidden"
-                  >
-                    {hoveredCardId === 'createsphere' && (
-                      <div
-                        className="absolute inset-0 pointer-events-none z-30"
-                        style={{
-                          background: `radial-gradient(circle 350px at ${tiltStyle.createsphere?.gx || 50}% ${tiltStyle.createsphere?.gy || 50}%, rgba(198,243,107,0.06), transparent 80%)`,
-                        }}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center p-6 sm:p-8 md:p-10 relative z-10">
+                  {/* Left Column: Large Visual Showcase */}
+                  <div className="lg:col-span-7 relative">
+                    <a
+                      href={createSphereProject.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      data-cursor="view"
+                      aria-label="View CreateSphere AI platform preview"
+                      className="block relative aspect-[16/10] rounded-2xl overflow-hidden bg-black border border-emerald-500/30 dark:border-[#C6F36B]/40 shadow-2xl cursor-pointer group/createspherepreview focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-[#C6F36B]"
+                    >
+                      <img
+                        src={createSphereProject.image}
+                        alt="CreateSphere AI — Creative Technology Suite Preview"
+                        className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-110"
+                        referrerPolicy="no-referrer"
+                        loading="lazy"
                       />
-                    )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-stone-950/85 via-stone-950/25 to-transparent pointer-events-none" />
 
-                    <div className="relative z-10">
-                      {/* Image Showcase */}
-                      <div
-                        data-cursor="view"
-                        className="relative aspect-video rounded-xl overflow-hidden bg-black mb-6 border border-stone-200 dark:border-[#262A34]"
-                      >
-                        <img
-                          src={createSphereProject.image}
-                          alt="CreateSphere AI — Creative Technology Suite Preview"
-                          className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                          referrerPolicy="no-referrer"
-                          loading="lazy"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 dark:from-[#111318] via-transparent to-transparent opacity-65" />
+                      {/* Top Live Status Indicator with Gemini AI Badge */}
+                      <div className="absolute top-3.5 left-3.5 flex items-center gap-2 bg-stone-950/90 text-emerald-300 dark:text-[#C6F36B] font-mono text-[10px] font-bold px-3 py-1.5 rounded-xl border border-emerald-500/40 backdrop-blur-md shadow-lg z-20">
+                        <Sparkles className="w-3.5 h-3.5 text-emerald-400 dark:text-[#C6F36B]" />
+                        <span className="tracking-wider">GENAI SUITE</span>
+                        <span className="text-emerald-500/50">·</span>
+                        <span className="text-stone-300 hidden sm:inline">GEMINI MULTIMODAL POWERED</span>
+                        <span className="text-emerald-500/50 hidden sm:inline">·</span>
+                        <span className="text-emerald-300 font-semibold hidden md:inline">TEXT-TO-IMAGE &amp; VIDEO</span>
+                      </div>
 
-                        <div className="absolute top-3 left-3 bg-stone-900/90 text-stone-100 font-mono text-[10px] font-bold px-2.5 py-1 rounded-lg border border-white/20 backdrop-blur-md flex items-center gap-1.5">
-                          <Sparkles className="w-3 h-3 text-emerald-400 dark:text-[#C6F36B]" />
-                          <span>GENAI SUITE · GEMINI POWERED</span>
+                      {/* Default Resting Visual Bar (Fades out when hovered) */}
+                      <div className="absolute bottom-3.5 left-4 right-4 flex items-center justify-between text-xs font-mono text-white/90 z-20 pointer-events-none transition-opacity duration-300 group-hover:opacity-0">
+                        <span className="bg-stone-950/80 px-2.5 py-1 rounded-lg backdrop-blur-sm border border-white/10 flex items-center gap-1.5 text-emerald-200 dark:text-[#C6F36B]">
+                          <Sparkles className="w-3.5 h-3.5 text-emerald-400 dark:text-[#C6F36B]" />
+                          <span>createsphere23.ai.studio</span>
+                        </span>
+                        <span className="bg-emerald-400 dark:bg-[#C6F36B] text-stone-950 font-bold px-2.5 py-1 rounded-lg shadow uppercase text-[10px] tracking-wider hidden sm:flex items-center gap-1">
+                          <Tag className="w-3 h-3 text-stone-950" />
+                          <span>Hover to Reveal Details</span>
+                        </span>
+                      </div>
+
+                      {/* Reveal Details Hover Overlay with Technical Tags */}
+                      <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5 pt-8 bg-gradient-to-t from-stone-950 via-stone-950/95 to-transparent backdrop-blur-md opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out z-20 pointer-events-none">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-300 dark:text-[#C6F36B] font-bold flex items-center gap-1.5">
+                            <Tag className="w-3 h-3 text-emerald-400 dark:text-[#C6F36B]" />
+                            <span>Reveal Details · Technical Tags</span>
+                          </span>
+                          <span className="text-[10px] font-mono text-emerald-200/70 dark:text-[#C6F36B]/70">
+                            {createSphereProject.tags.length} Capabilities
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {createSphereProject.tags.map((tag, idx) => (
+                            <span
+                              key={idx}
+                              style={{ transitionDelay: `${idx * 35}ms` }}
+                              className="text-[10px] font-mono px-2.5 py-1 rounded-lg bg-stone-900/90 text-emerald-300 dark:text-[#C6F36B] border border-emerald-500/40 shadow-sm transition-all duration-300 transform group-hover:translate-y-0 translate-y-1"
+                            >
+                              #{tag}
+                            </span>
+                          ))}
                         </div>
                       </div>
+                    </a>
+                  </div>
 
-                      <div className="text-xs font-mono uppercase tracking-widest text-emerald-600 dark:text-[#C6F36B] mb-2 font-bold flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5" />
-                        <span>CATEGORY: AI ART · {createSphereProject.category}</span>
-                      </div>
-                      <h3 className="text-2xl font-bold text-stone-950 dark:text-[#FFFFFF] font-display mb-3">
-                        {createSphereProject.title}
-                      </h3>
-                      <p className="text-sm text-stone-600 dark:text-[#F3F1EA]/80 leading-relaxed mb-6 font-normal">
-                        {createSphereProject.description}
-                      </p>
-
-                      {/* Verified Capabilities */}
-                      <div className="space-y-2 mb-8 text-xs text-stone-600 dark:text-[#9296A2]">
-                        {createSphereProject.verifiedDetails.map((detail, idx) => (
-                          <div key={idx} className="flex items-start gap-2">
-                            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-[#C6F36B] shrink-0 mt-0.5" />
-                            <span>{detail}</span>
-                          </div>
-                        ))}
-                      </div>
+                  {/* Right Column: Editorial Details */}
+                  <div className="lg:col-span-5 flex flex-col justify-center">
+                    <div className="text-xs font-mono uppercase tracking-widest text-emerald-600 dark:text-[#C6F36B] mb-1 font-bold flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>CATEGORY: AI ART · AI ART &amp; GENERATIVE TECHNOLOGY</span>
                     </div>
 
-                    {/* CTAs */}
-                    <div className="flex flex-wrap items-center gap-3 pt-6 border-t border-stone-200 dark:border-[#262A34] relative z-10">
+                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black text-stone-950 dark:text-[#FFFFFF] font-display tracking-tight leading-tight mb-2">
+                      {createSphereProject.title}
+                    </h3>
+
+                    <div className="text-xs font-mono text-emerald-700 dark:text-[#C6F36B] mb-4 font-semibold">
+                      {createSphereProject.subtitle}
+                    </div>
+
+                    <p className="text-sm text-stone-600 dark:text-[#F3F1EA]/85 leading-relaxed mb-5 font-normal">
+                      {createSphereProject.description}
+                    </p>
+
+                    {/* Verified Details */}
+                    <div className="space-y-2 mb-6 text-xs text-stone-600 dark:text-[#9296A2]">
+                      {createSphereProject.verifiedDetails.map((detail, idx) => (
+                        <div key={idx} className="flex items-start gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-[#C6F36B] shrink-0 mt-0.5" />
+                          <span>{detail}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Technical Tags */}
+                    <div className="flex flex-wrap gap-1.5 mb-7">
+                      {createSphereProject.tags.map((tag, idx) => (
+                        <span
+                          key={idx}
+                          className="text-[10px] font-mono px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-[#C6F36B] border border-emerald-500/20 group-hover:border-emerald-500/40 transition-colors"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Action CTAs */}
+                    <div className="flex flex-wrap items-center gap-3">
                       <motion.a
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         href={createSphereProject.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-5 py-3 text-xs font-bold text-stone-950 dark:text-[#111318] bg-emerald-400 dark:bg-[#C6F36B] hover:bg-emerald-300 dark:hover:bg-[#d5faa0] rounded-xl transition-all shadow-md active:scale-95 uppercase tracking-wider"
+                        className="inline-flex items-center gap-2 px-6 py-3.5 text-xs font-bold text-stone-950 dark:text-[#111318] bg-emerald-400 dark:bg-[#C6F36B] hover:bg-emerald-300 dark:hover:bg-[#d5faa0] rounded-xl transition-all shadow-md active:scale-95 uppercase tracking-wider"
                       >
                         <span>Visit CreateSphere</span>
                         <ExternalLink className="w-3.5 h-3.5 text-stone-950 dark:text-[#111318]" />
                       </motion.a>
 
-                      <button
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                         onClick={() => onOpenInquiry('CreateSphere AI Creative Services')}
-                        className="inline-flex items-center gap-2 px-5 py-3 text-xs font-semibold text-stone-800 dark:text-[#FFFFFF] hover:text-emerald-700 dark:hover:text-[#C6F36B] bg-stone-100 dark:bg-[#111318] hover:bg-stone-200 dark:hover:bg-[#262A34] border border-stone-300 dark:border-[#262A34] rounded-xl transition-all cursor-pointer"
+                        className="inline-flex items-center gap-2 px-5 py-3.5 text-xs font-semibold text-stone-800 dark:text-[#FFFFFF] hover:text-emerald-700 dark:hover:text-[#C6F36B] bg-stone-100 dark:bg-[#1A1815] hover:bg-stone-200 dark:hover:bg-[#262420] border border-stone-300 dark:border-[#262A34] rounded-xl transition-all cursor-pointer"
                       >
                         <span>Request Creative Service</span>
                         <ArrowUpRight className="w-3.5 h-3.5 text-emerald-600 dark:text-[#C6F36B]" />
-                      </button>
+                      </motion.button>
                     </div>
                   </div>
-                )}
+                </div>
               </div>
             )}
           </motion.div>

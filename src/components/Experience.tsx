@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { Calendar, MapPin, CheckCircle2, Award, FileText, Play, ExternalLink } from 'lucide-react';
 import { EXPERIENCES } from '../data/portfolioData';
 
@@ -9,10 +10,16 @@ interface ExperienceProps {
 
 export const Experience: React.FC<ExperienceProps> = ({ onSelectCertificate, onPlayVideo }) => {
   return (
-    <section id="experience" className="py-24 relative border-t border-stone-200 dark:border-[#262A34] bg-[#FAF9F6] dark:bg-[#111318] transition-colors duration-300">
+    <section id="experience" className="py-24 relative bg-[#FAF9F6] dark:bg-[#111318] transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6 md:px-10 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14"
+        >
           <div>
             <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-emerald-600 dark:text-[#C6F36B] uppercase mb-2 font-bold">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-[#C6F36B]" />
@@ -25,12 +32,19 @@ export const Experience: React.FC<ExperienceProps> = ({ onSelectCertificate, onP
           <p className="text-sm text-stone-600 dark:text-[#9296A2] max-w-md font-normal leading-relaxed">
             Documented video editing internships and industrial AI training programs combining creative storytelling and modern technology.
           </p>
-        </div>
+        </motion.div>
 
         {/* Timeline */}
         <div className="relative border-l border-stone-300 dark:border-[#262A34] ml-4 md:ml-8 pl-6 md:pl-10 space-y-12">
-          {EXPERIENCES.map((exp) => (
-            <div key={exp.id} className="relative group">
+          {EXPERIENCES.map((exp, idx) => (
+            <motion.div
+              key={exp.id}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.6, delay: idx * 0.15 }}
+              className="relative group"
+            >
               {/* Timeline marker */}
               <div className="absolute -left-[31px] md:-left-[47px] top-2.5 w-3.5 h-3.5 rounded-full bg-white dark:bg-[#111318] border-2 border-emerald-500 dark:border-[#C6F36B] group-hover:scale-125 transition-transform" />
 
@@ -147,7 +161,7 @@ export const Experience: React.FC<ExperienceProps> = ({ onSelectCertificate, onP
                   </div>
                 )}
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

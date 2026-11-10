@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
 import { ExternalLink, Eye, Download, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { CERTIFICATIONS } from '../data/portfolioData';
 import { CertificationItem } from '../types/portfolio';
@@ -34,12 +35,18 @@ export const Certifications: React.FC<CertificationsProps> = ({
   };
 
   return (
-    <section id="credentials" className="py-24 relative border-t border-stone-200 dark:border-[#262A34] bg-[#FAF9F6] dark:bg-[#111318] transition-colors duration-300">
+    <section id="credentials" className="py-24 relative bg-[#FAF9F6] dark:bg-[#111318] transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6 md:px-10 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14"
+        >
           <div>
-            <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-emerald-600 dark:text-[#C6F36B] uppercase mb-2 font-bold">
+            <div className="text-xs font-mono tracking-widest text-emerald-600 dark:text-[#C6F36B] uppercase mb-2 font-bold flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-[#C6F36B]" />
               <span>07 / CREDENTIALS & CERTIFICATIONS</span>
             </div>
@@ -51,13 +58,17 @@ export const Certifications: React.FC<CertificationsProps> = ({
             <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-[#C6F36B]" />
             <span>6 VERIFIED INDUSTRY SPECIALIZATIONS</span>
           </div>
-        </div>
+        </motion.div>
 
         {/* 6 Verified Certificates Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {CERTIFICATIONS.map((cert) => (
-            <div
+          {CERTIFICATIONS.map((cert, idx) => (
+            <motion.div
               key={cert.id}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.5, delay: idx * 0.08 }}
               className="rounded-2xl border border-stone-200 dark:border-[#262A34] bg-white dark:bg-[#1B1E26] p-6 sm:p-7 flex flex-col justify-between hover:border-emerald-500/40 dark:hover:border-[#C6F36B]/40 transition-all duration-300 group shadow-md"
             >
               <div>
@@ -123,7 +134,7 @@ export const Certifications: React.FC<CertificationsProps> = ({
                   </a>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

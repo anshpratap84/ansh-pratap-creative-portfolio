@@ -61,7 +61,7 @@ export const Toolkit: React.FC = () => {
   };
 
   return (
-    <section id="toolkit" className="py-24 relative border-t border-stone-200 dark:border-[#262A34] bg-[#FAF9F6] dark:bg-[#111318] transition-colors duration-300">
+    <section id="toolkit" className="py-24 relative bg-[#FAF9F6] dark:bg-[#111318] transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         {/* Section Header */}
         <motion.div

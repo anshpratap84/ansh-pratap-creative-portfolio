@@ -338,7 +338,7 @@ export const ZindagiCaseStudyModal: React.FC<ZindagiCaseStudyModalProps> = ({
                   </a>
 
                   <a
-                    href="https://github.com/AnshPratap2314"
+                    href="https://github.com/anshpratap84"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl bg-[#171713] hover:bg-[#22231E] border border-[#D99A35]/30 text-[#F2E7D2] font-mono text-xs font-semibold transition-all"
