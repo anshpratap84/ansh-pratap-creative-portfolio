@@ -127,6 +127,78 @@ export const ProjectDistributionChart: React.FC<ProjectDistributionChartProps> =
     return null;
   };
 
+  // Custom label renderer for Donut view showing category names and counts directly on the chart
+  const renderCustomizedDonutLabel = (props: any) => {
+    const { cx, cy, midAngle, outerRadius, payload } = props;
+    const cat: CategoryData = payload;
+    if (!cat) return null;
+
+    const RADIAN = Math.PI / 180;
+    const sin = Math.sin(-RADIAN * midAngle);
+    const cos = Math.cos(-RADIAN * midAngle);
+
+    // Dynamic elbow connector coordinates
+    const sx = cx + (outerRadius + 3) * cos;
+    const sy = cy + (outerRadius + 3) * sin;
+    const mx = cx + (outerRadius + 16) * cos;
+    const my = cy + (outerRadius + 16) * sin;
+    const isRightSide = cos >= 0;
+    const ex = mx + (isRightSide ? 14 : -14);
+    const ey = my;
+
+    const isHighlighted = activeCategory === cat.shortName;
+
+    return (
+      <g className="transition-all duration-300 pointer-events-none select-none">
+        {/* Pointer elbow line */}
+        <path
+          d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`}
+          stroke={isHighlighted ? cat.color : '#71717A'}
+          strokeWidth={isHighlighted ? 2 : 1.2}
+          strokeOpacity={isHighlighted ? 1 : 0.6}
+          fill="none"
+        />
+        {/* Terminal dot matching category discipline color */}
+        <circle
+          cx={ex}
+          cy={ey}
+          r={isHighlighted ? 3.5 : 2.5}
+          fill={cat.color}
+          stroke="#111318"
+          strokeWidth={1}
+        />
+        {/* Category Name & Project Ratio Label */}
+        <text
+          x={ex + (isRightSide ? 8 : -8)}
+          y={ey}
+          textAnchor={isRightSide ? 'start' : 'end'}
+          dominantBaseline="central"
+          className="font-mono text-[11px] sm:text-xs"
+        >
+          <tspan
+            className={`font-semibold ${
+              isHighlighted
+                ? 'fill-emerald-500 dark:fill-[#C6F36B] font-bold'
+                : 'fill-stone-800 dark:fill-[#F3F1EA]'
+            }`}
+          >
+            {cat.shortName}
+          </tspan>
+          <tspan
+            dx={4}
+            className={`text-[10px] ${
+              isHighlighted
+                ? 'fill-emerald-500 dark:fill-[#C6F36B] font-semibold'
+                : 'fill-stone-500 dark:fill-[#9296A2] font-normal'
+            }`}
+          >
+            {cat.percentage}% <tspan className="text-[9px] opacity-80">({cat.count})</tspan>
+          </tspan>
+        </text>
+      </g>
+    );
+  };
+
   return (
     <div
       className={`rounded-2xl border border-stone-200 dark:border-[#262A34] bg-white dark:bg-[#171A21] p-5 sm:p-7 shadow-sm transition-colors duration-300 ${className}`}
@@ -184,7 +256,7 @@ export const ProjectDistributionChart: React.FC<ProjectDistributionChartProps> =
       {/* Main Chart Area */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-6 items-center">
         {/* Recharts Container */}
-        <div className="lg:col-span-8 w-full min-w-0 h-64 sm:h-72">
+        <div className="lg:col-span-8 w-full min-w-0 h-72 sm:h-80">
           {viewMode === 'bar' ? (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
@@ -238,38 +310,71 @@ export const ProjectDistributionChart: React.FC<ProjectDistributionChartProps> =
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Tooltip content={<CustomTooltip />} />
-                <Pie
-                  data={CATEGORY_METRICS}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={55}
-                  outerRadius={85}
-                  paddingAngle={4}
-                  dataKey="count"
-                >
-                  {CATEGORY_METRICS.map((entry, index) => (
-                    <Cell
-                      key={`donut-cell-${index}`}
-                      fill={entry.color}
-                      stroke="#111318"
-                      strokeWidth={2}
-                      onMouseEnter={() => setActiveCategory(entry.shortName)}
-                      onMouseLeave={() => setActiveCategory(null)}
-                      className="transition-all duration-300 hover:opacity-90 cursor-pointer"
-                      style={{
-                        filter:
-                          activeCategory === entry.shortName
-                            ? 'drop-shadow(0 0 10px rgba(198, 243, 107, 0.7))'
-                            : 'none',
-                      }}
-                    />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
+            <div className="w-full h-full relative">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart margin={{ top: 20, right: 35, bottom: 20, left: 35 }}>
+                  <Tooltip content={<CustomTooltip />} />
+                  <Pie
+                    data={CATEGORY_METRICS}
+                    nameKey="shortName"
+                    dataKey="count"
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={46}
+                    outerRadius={70}
+                    paddingAngle={3}
+                    labelLine={false}
+                    label={renderCustomizedDonutLabel}
+                  >
+                    {CATEGORY_METRICS.map((entry, index) => (
+                      <Cell
+                        key={`donut-cell-${index}`}
+                        fill={entry.color}
+                        stroke="#111318"
+                        strokeWidth={2}
+                        onMouseEnter={() => setActiveCategory(entry.shortName)}
+                        onMouseLeave={() => setActiveCategory(null)}
+                        className="transition-all duration-300 hover:opacity-90 cursor-pointer"
+                        style={{
+                          filter:
+                            activeCategory === entry.shortName
+                              ? 'drop-shadow(0 0 10px rgba(198, 243, 107, 0.7))'
+                              : 'none',
+                        }}
+                      />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+
+              {/* Central HUD readout inside the donut hole displaying Project Ratio */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none text-center flex flex-col items-center justify-center px-1">
+                {activeCategory ? (
+                  <>
+                    <span className="font-display font-extrabold text-2xl sm:text-3xl text-emerald-500 dark:text-[#C6F36B] leading-none transition-all">
+                      {CATEGORY_METRICS.find((c) => c.shortName === activeCategory)?.percentage}%
+                    </span>
+                    <span className="text-[9px] sm:text-[10px] font-mono text-stone-500 dark:text-[#9296A2] tracking-wider uppercase mt-1 font-semibold">
+                      Project Ratio
+                    </span>
+                    <span className="text-[8px] font-mono text-stone-400 dark:text-stone-500 mt-0.5">
+                      ({CATEGORY_METRICS.find((c) => c.shortName === activeCategory)?.count} of {totalProjects})
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className="text-[11px] sm:text-xs font-mono font-bold tracking-widest text-stone-900 dark:text-[#F3F1EA] uppercase leading-tight">
+                      PROJECT
+                      <br />
+                      RATIO
+                    </span>
+                    <span className="text-[8px] sm:text-[9px] font-mono text-emerald-600 dark:text-[#C6F36B] tracking-wider uppercase mt-1">
+                      BREAKDOWN
+                    </span>
+                  </>
+                )}
+              </div>
+            </div>
           )}
         </div>
 
