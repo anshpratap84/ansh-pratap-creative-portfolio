@@ -14,7 +14,7 @@ export const PERSONAL_INFO = {
   linkedin: 'https://linkedin.com/in/ansh-pratap-68156625b',
   github: 'https://github.com/anshpratap84',
   existingPortfolio: 'https://ansh-portfolio-rho-seven.vercel.app',
-  resumeUrl: '/assets/aistudio/Ansh_Pratap_Resume_1283b106.pdf',
+  resumeUrl: '/assets/aistudio/Ansh_creative_resume_a8ece222.pdf',
   photoUrl: '/assets/aistudio/Unknown_0120cbc3.jpg',
   introduction:
     "I'm Ansh — a creative content creator, video editor, and web developer combining visual storytelling with modern digital technology. From dynamic short-form video pacing to graphic brand design and generative AI workflows, I build compelling visual experiences that communicate ideas clearly.",
@@ -436,20 +436,18 @@ export const TOOLKIT: ToolItem[] = [
 
 export const EXPERIENCES: ExperienceItem[] = [
   {
-    id: 'exp-cttc',
-    role: 'AI & ML Industrial Trainee',
-    organization: 'Central Tool Room & Training Centre (CTTC), Bhubaneswar',
-    location: 'Bhubaneswar, Odisha, India (Govt. of India Society, Ministry of MSME)',
-    duration: '28 April 2025 – 28 May 2025',
+    id: 'exp-renan',
+    role: 'Artificial Intelligence Data Operations Intern',
+    organization: 'Renan Partners Private Limited',
+    location: 'Remote',
+    duration: '09 November 2026 – Present',
     description:
-      'Completed one month of industrial training covering Python, supervised and unsupervised machine learning, NLP, computer vision, and Keras. Worked on a face detection and recognition attendance system using OpenCV, SVM, and LBPH.',
+      'Selected for a 30-working-day remote internship in the Project Delivery team, reporting to the Project Lead and delivering AI data operations activities to company quality standards.',
     keyHighlights: [
-      'Hands-on industrial software training at Government of India MSME facility',
-      'Studied Python programming, ML problem solving, NLP, computer vision, and deep learning with Keras',
-      'Built a face detection and recognition attendance system utilizing OpenCV, SVM, and LBPH algorithms',
-      'Benchmarked classifier performance across accuracy and inference speed on custom collected datasets',
+      'Selected for a 30-working-day remote internship in the Project Delivery team, reporting to the Project Lead',
+      'Complete assigned AI data operations project activities and deliverables in line with company quality standards, instructions, and timelines',
+      'Work remotely with professional communication protocols while handling company and client information under strict confidentiality',
     ],
-    associatedCertificates: ['cttc-training'],
   },
   {
     id: 'exp-istudio',
@@ -466,6 +464,22 @@ export const EXPERIENCES: ExperienceItem[] = [
       'Awarded both the official Certificate of Internship (ISVEI2342266) and Certificate of Training (ISVET2342266)',
     ],
     associatedCertificates: ['istudio-internship'],
+  },
+  {
+    id: 'exp-cttc',
+    role: 'AI & ML Industrial Trainee',
+    organization: 'Central Tool Room & Training Centre (CTTC), Bhubaneswar',
+    location: 'Bhubaneswar, Odisha, India (Govt. of India Society, Ministry of MSME)',
+    duration: '28 April 2025 – 28 May 2025',
+    description:
+      'Completed one month of industrial training covering Python, supervised and unsupervised machine learning, NLP, computer vision, and Keras. Worked on a face detection and recognition attendance system using OpenCV, SVM, and LBPH.',
+    keyHighlights: [
+      'Hands-on industrial software training at Government of India MSME facility',
+      'Studied Python programming, ML problem solving, NLP, computer vision, and deep learning with Keras',
+      'Built a face detection and recognition attendance system utilizing OpenCV, SVM, and LBPH algorithms',
+      'Benchmarked classifier performance across accuracy and inference speed on custom collected datasets',
+    ],
+    associatedCertificates: ['cttc-training'],
   },
 ];
 
